@@ -1,0 +1,17 @@
+1. Verify all regex in config file as to its validity:
+   
+   try:
+      re.compile(*regex statement*)
+      is_valid = true
+   except re.error
+      is_valid = false
+
+2. Verify that any monitoring names or other keys actually exist in the API response to avoid runtime errors
+
+3. Move all configuration items into a configuration file under $nagios_mediator_home/config
+
+4. File paths as part of config file
+
+5. More testing to break metric configuration file to avoid runtime errors
+
+

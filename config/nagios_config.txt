@@ -1,0 +1,8 @@
+protocol=http
+hostName=nagios
+port=80
+apikey=ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG
+username=nagiosadmin
+password=nagios
+filepath=/opt/IBM/scanalytics/mediators/NagiosXI_MedPack_v1.2.0_20181010/nagioscsv/
+jarpath=/opt/IBM/scanalytics/mediators/NagiosXI_MedPack_v1.2.0_20181010/bin/
