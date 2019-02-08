@@ -1,13 +1,31 @@
-#PI Filename			Record		CSV Definition....
-cpuStats<timestamp>.csv		"CPU Stats"	"timestamp"=<timestamp>,"host name"=host_name,"user"=regex[performance_data:user=(.+?)\%],"system"=regex[performance_data:system=(.+?)\%],"iowait"=regex[performance_data:iowait=(.+?)\%],"idle"=regex[performance_data:idle=(.+?)\%]
-cpuLoad<timestamp>.csv		"Current Load"	"timestamp"=<timestamp>,"host name"=host_name,"Load5"=regex[performance_data:load5=(.+?)\;]
-cpuLoad<timestamp>.csv		"Load"		"timestamp"=<timestamp>,"host name"=host_name,"Load5"=regex[performance_data:load5=(.+?)\;]
-diskUsage<timestamp>.csv	"/ Disk Usage"	"timestamp"=<timestamp>,"host name"=host_name,"disk name"=regex[performance_data:^(.+?)=],"disk used"=regex[performance_data:^/+?=(.+?)MB]
-hostStatus<timestamp>.csv	"Ping"		"timestamp"=<timestamp>,"name"=host_name,"rta"=regex[performance_data:rta=(.+?)ms],"pl"=regex[performance_data:pl=(.+?)\%]
-memoryData<timestamp>.csv	"Memory Usage"	"timestamp"=<timestamp>,"host name"=host_name,"memory total"=regex[performance_data:total=(.+?)MB],"memory used"=regex[performance_data:used=(.+?)MB]
-#memoryUsage<timestamp>.csv	"Memory Data"	"timestamp"=<timestamp>,"host name"=host_name,"committed"=committed,"physical"=physical
-pingData<timestamp>.csv		"Ping"		"timestamp"=<timestamp>,"host name"=host_name,"ping_rta value"=performance_data->regex:rta=(.+?)ms,"ping_pl value"=performance_data->regex:pl=(.+?)\%
-swapUsage<timestamp>.csv	"Swap Usage"	"timestamp"=<timestamp>,"host name"=host_name,"swap data"=performance_data->regex:swap=(.+?)MB
-totalProcess<timestamp>.csv	"Total Processes"	"timestamp"=<timestamp>,"host name"=host_name,"total processes"=performance_data->regex:procs=(.+?)\;
-users<timestamp>.csv		"Current Users"	"timestamp"=<timestamp>,"host name"=host_name,"user"=performance_data->regex:users=(.+?)\;
-
+#
+# Default Out-of-Box vanilla NagiosXI 5.5.8 monitor definitions:
+#
+#PI Filename			MonitorRecord	CSV Definition
+cpuStats[timestamp].csv		"CPU Stats"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"user=(.+?)\%"],"system"=regex[performance_data:"system=(.+?)\%"],"iowait"=regex[performance_data:"iowait=(.+?)\%"],"idle"=regex[performance_data:"idle=(.+?)\%"]
+cpuLoad[timestamp].csv		"Current Load"	"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
+cpuLoad[timestamp].csv		"Load"		"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
+diskUsage[timestamp].csv	"/ Disk Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[performance_data:"^(.+?)="],"disk used"=regex[performance_data:"^/+?=(.+?)MB"]
+hostStatus[timestamp].csv	"Ping"		"timestamp"=var[timestamp],"name"=value[host_name],"rta"=regex[performance_data:rta=(.+?)ms],"pl"=regex[performance_data:pl=(.+?)\%]
+memoryData[timestamp].csv	"Memory Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=regex[performance_data:"total=(.+?)MB"],"memory used"=regex[performance_data:"used=(.+?)MB"]
+#memoryUsage[timestamp].csv	"Memory Data"	"timestamp"=var[timestamp],"host name"=value[host_name],"committed"=committed,"physical"=physical
+pingData[timestamp].csv		"Ping"		"timestamp"=var[timestamp],"host name"=value[host_name],"ping_rta value"=regex[performance_data:"rta=(.+?)ms"],"ping_pl value"=regex[performance_data:"pl=(.+?)\%"]
+swapUsage[timestamp].csv	"Swap Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:"swap=(.+?)MB"]
+totalProcess[timestamp].csv	"Total Processes"	"timestamp"=var[timestamp],"host name"=value[host_name],"total processes"=regex[performance_data:"procs=(.+?)\;"]
+users[timestamp].csv		"Current Users"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"users=(.+?)\;"]
+users[timestamp].csv		"Users"		"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"users=(.+?)\;"]
+#
+# State of Nevada custom monitor definitions
+#
+diskUsage[timestamp].csv	match:"Disk Check"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[name:"Disk Check (.*)"],"disk used"=regex[performance_data:"^.+?=(.+?)MB"]
+diskUsage[timestamp].csv	match:"Free Space on"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[name:"Free Space on (.*)"],"disk used"=regex[performance_data:"^.+?Used Space&apos\;=(.+?)Gb\;"]
+diskUsage[timestamp].csv	match:"Free Drive Space on"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[name:"Free Drive Space on (.*)"],"disk used"=regex[performance_data:"^.+?Used Space&apos\;=(.+?)Gb\;"]
+memoryData[timestamp].csv	"Memory Check"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=regex[performance_data:".*\;(.*)"],"memory used"=regex[performance_data:".+?Memory usage&apos\;=(.+?)MB"]
+users[timestamp].csv		"User Check"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"users=(.+?)\;"]
+swapUsage[timestamp].csv	"Check PagingSpace"	"timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[status_text:"Memory OK - (.+?)% pagespace used"]
+HTTPData[timestamp].csv		"HTTP"		"timestamp"=var[timestamp],"host name"=value[host_name],"http data"=regex[performance_data:"time=(.+?)s\;"]
+cpuStats[timestamp].csv		"CPU Load NT"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=literal[0],"system"=regex[performance_data:"0 min avg Load&apos\;=(.+?)\%;"],"iowait"=literal[0],"idle"=literal[0]
+#
+# macOS Nagios default monitor for swap usage is under Memory Usage monitor for Nagios (output is different from other default monitors)
+#
+swapUsage[timestamp].csv       "Memory Usage"  "timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:".+?swpUsed=(.+?)%"]
