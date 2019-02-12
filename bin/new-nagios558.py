@@ -20,6 +20,28 @@ import shlex
 import csv
 import StringIO
 
+
+#############################
+#
+#  Funciton to read configuration file
+#
+#######################################
+
+def load_properties(filepath, sep='=', comment_char='#'):
+    """
+    Read the file passed as parameter as a properties file.
+    """
+    props = {}
+    with open(filepath, "rt") as f:
+        for line in f:
+            l = line.strip()
+            if l and not l.startswith(comment_char):
+                key_value = l.split(sep)
+                key = key_value[0].strip()
+                value = sep.join(key_value[1:]).strip().strip('"') 
+                props[key] = value 
+    return props
+
 ##############################
 #
 #  Function definition to write out a line to the appropriate csv file with metric data
@@ -117,13 +139,64 @@ else:
    print "unable to find nagioscsv directory"
    exit()
 
-debug = 0
+if(os.path.isfile(mediatorHome + "/config/nagios_config.txt")):
+   pass
+else:
+   print "unable to find mediator config file " + mediatorHome + "/config/nagios_config.txt"
+   exit()
+
+configvars = load_properties(mediatorHome + "/config/nagios_config.txt")
+
+print configvars
+print configvars['hostName']
+
+if 'hostName' in configvars.keys():
+   myNagiosHost = configvars['hostName']
+   print "Nagios host is " + myNagiosHost
+else:
+   print "Nagios host name not defined in config file."
+   exit()
+
+if 'protocol' in configvars.keys():
+   myProtocol = configvars['protocol']
+   print "Protocol to use is " + myProtocol
+else:
+   print "Protocol (http or https) not defined in config file."
+   exit()
+
+if 'apikey' in configvars.keys():
+   myApiKey = configvars['apikey']
+   print "API key to use: " + myApiKey
+else:
+   print "API key not defined in config file."
+   exit()
+
+if 'port' in configvars.keys():
+   myNagiosPort = configvars['port']
+   print "TCP Port to use: " + myNagiosPort
+else:
+   print "Port number not defined in config file. Defaulting to port 80"
+   myNagiosPort = "80"
+
+if 'debug' in configvars.keys():
+   if (configvars['debug'] == '1'):
+      print "Debug enabled..."
+      debug = 1
+   else:
+      debug = 0
+
+if 'saveApiResponse' in configvars.keys():
+   if (configvars['saveApiResponse'] == '1'):
+      print "saving API response under log directory..."
+      saveApiResponse = 1
+   else:
+      saveApiResponse = 0
+
 myTimeStamp = time.strftime("%Y%m%d%H%M%S", time.gmtime())
-myProtocol = "http"
-myNagiosHost = "192.168.2.127"
-myNagiosPort = "80"
-myApiKey = "ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG"
-saveApiResponse = 0
+#myProtocol = "http"
+#myNagiosHost = "192.168.2.127"
+#myNagiosPort = "80"
+#myApiKey = "ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG"
 
 serviceStatusQuery = myProtocol + "://" + myNagiosHost + ":" + myNagiosPort + "/nagiosxi/api/v1/objects/servicestatus?apikey=" + myApiKey + "&pretty=1"
 
@@ -139,6 +212,9 @@ serviceStatusQuery = myProtocol + "://" + myNagiosHost + ":" + myNagiosPort + "/
 #            [<Service Name>]
 #	                   [csvheader]=csv header definition for associated file
 #                          [filename]=filename to write csv data
+#                          [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
+#                          [csvDict]
+#                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
 #                          [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
 #                          [csvDict]
 #                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
@@ -228,9 +304,13 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
 
 print "reading API"
 
+print "query url: " + serviceStatusQuery
 
-#serviceStatusContents = urllib2.urlopen(serviceStatusQuery).read()
-#parsedServiceStatusContents = json.loads(serviceStatusContents)
+serviceStatusContents = urllib2.urlopen(serviceStatusQuery).read()
+parsedServiceStatusContents = json.loads(serviceStatusContents)
+
+print "API read completed"
+
 
 ######
 #
@@ -240,8 +320,8 @@ print "reading API"
 #
 ############################################################
 
-with open("servicestatus_Nevada.json") as f:
-   parsedServiceStatusContents = json.load(f)
+#with open("servicestatus_Nevada.json") as f:
+#   parsedServiceStatusContents = json.load(f)
 
 if(saveApiResponse):
    serviceStatusApiOutput = open( mediatorHome + "/log/serviceStatusApiOutput.json", "w")
@@ -255,7 +335,7 @@ if(saveApiResponse):
 ##########################################################################################
 
 recordCount = int(parsedServiceStatusContents['recordcount'])
-#if debug: print("number of service status records: " + str(recordCount))
+if debug: print("number of service status records: " + str(recordCount))
 
 recordIndex = 0
 while recordIndex < recordCount:
@@ -318,5 +398,4 @@ while recordIndex < recordCount:
             ###################################################################################
 
    recordIndex = recordIndex + 1
-   
 

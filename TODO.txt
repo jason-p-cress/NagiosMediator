@@ -8,12 +8,12 @@
 
 2. Verify that any monitoring names or other keys actually exist in the API response to avoid runtime errors
 
-3. Move all configuration items (e.g. API endpoint, etc) into a configuration file under $nagios_mediator_home/config, rather than in the code
+DONE 021119: 3. Move all configuration items (e.g. API endpoint, etc) into a configuration file under $nagios_mediator_home/config, rather than in the code
 
-4. File paths as part of config file as well, rather than in the code (../log, ../config, etc)
+DONE 020819: 4. File paths as part of config file as well, rather than in the code (../log, ../config, etc)
 
 5. More testing to break metric configuration file to ensure avoidance of runtime errors
 
-6. Better error handling if the API endpoint doesn't respond
+6. Better error handling if the API endpoint doesn't respond, also add timeout
 
 7. Warnings and errors to log file rather than stdout

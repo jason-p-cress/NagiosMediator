@@ -1,8 +1,10 @@
+[Nagios mediator configuration]
 protocol=http
-hostName=nagios
+hostName=192.168.2.127
 port=80
 apikey=ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG
 username=nagiosadmin
 password=nagios
-filepath=/opt/IBM/scanalytics/mediators/NagiosXI_MedPack_v1.2.0_20181010/nagioscsv/
-jarpath=/opt/IBM/scanalytics/mediators/NagiosXI_MedPack_v1.2.0_20181010/bin/
+installpath=/home/jcress/Development/IBM-Field-Solutions/Nagios558Mediator/
+debug=0
+saveApiResponse=1
