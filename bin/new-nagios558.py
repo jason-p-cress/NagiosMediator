@@ -125,13 +125,23 @@ def writePiCsvEntry(filename, csvheader, csvdatadef, csvDict, apiMonitorEntry):
 #
 ##############################
 
-mediatorBinDir = os.getcwd()
+mediatorBinDir = os.path.dirname(os.path.abspath(__file__))
 extr = re.search("(.*)bin", mediatorBinDir)
 if extr:
    mediatorHome = extr.group(1)
 else:
-   print "unable to find mediator home directory. Is it installed properly?"
+   print "unable to find mediator home directory. Is it installed properly? bindir = " + mediatorBinDir
    exit()
+
+#mediatorBinDir = sys.argv[0]
+#extr = re.search("(.*)bin", mediatorBinDir)
+#if extr:
+#   mediatorHome = extr.group(1)
+#   print mediatorHome
+#   exit()
+#else:
+#   print "unable to find mediator home directory. Is it installed properly? bindir = " + mediatorBinDir
+#   exit()
 
 if(os.path.isdir(mediatorHome + "nagioscsv")):
    csvFileDir = "../nagioscsv/"
@@ -302,6 +312,7 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
 #
 #############################################################################################
 
+
 print "reading API"
 
 print "query url: " + serviceStatusQuery
@@ -322,6 +333,8 @@ print "API read completed"
 
 #with open("servicestatus_Nevada.json") as f:
 #   parsedServiceStatusContents = json.load(f)
+#saveApiResponse=0 
+
 
 if(saveApiResponse):
    serviceStatusApiOutput = open( mediatorHome + "/log/serviceStatusApiOutput.json", "w")

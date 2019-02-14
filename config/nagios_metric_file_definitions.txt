@@ -26,6 +26,6 @@ swapUsage[timestamp].csv	"Check PagingSpace"	"timestamp"=var[timestamp],"host na
 HTTPData[timestamp].csv		"HTTP"		"timestamp"=var[timestamp],"host name"=value[host_name],"http data"=regex[performance_data:"time=(.+?)s\;"]
 cpuStats[timestamp].csv		"CPU Load NT"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=literal[0],"system"=regex[performance_data:"0 min avg Load&apos\;=(.+?)\%;"],"iowait"=literal[0],"idle"=literal[0]
 #
-# macOS Nagios default monitor for swap usage is under Memory Usage monitor for Nagios (output is different from other default monitors)
+# macOS Nagios default monitor for swap usage is under Memory Usage monitor for Nagios (output is different from other default monitors) (Jason's lab)
 #
-swapUsage[timestamp].csv       "Memory Usage"  "timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:".+?swpUsed=(.+?)%"]
+#swapUsage[timestamp].csv       "Memory Usage"  "timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:".+?swpUsed=(.+?)%"]

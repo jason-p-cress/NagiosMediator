@@ -6,5 +6,5 @@ apikey=ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG
 username=nagiosadmin
 password=nagios
 installpath=/home/jcress/Development/IBM-Field-Solutions/Nagios558Mediator/
-debug=0
+debug=1
 saveApiResponse=1

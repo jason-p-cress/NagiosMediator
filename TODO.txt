@@ -14,6 +14,6 @@ DONE 020819: 4. File paths as part of config file as well, rather than in the co
 
 5. More testing to break metric configuration file to ensure avoidance of runtime errors
 
-6. Better error handling if the API endpoint doesn't respond, also add timeout
+6. Better error handling if the API endpoint doesn't respond, or generates an error (e.g. invalid API key), also add timeout
 
 7. Warnings and errors to log file rather than stdout
