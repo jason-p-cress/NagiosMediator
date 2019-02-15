@@ -19,6 +19,17 @@ import os
 import shlex
 import csv
 import StringIO
+import logging
+
+
+############################
+#
+#  Function to print to log file
+#
+###############################
+
+def printlog(logentry, logfile):
+   pass
 
 
 #############################
@@ -58,19 +69,19 @@ def writePiCsvEntry(filename, csvheader, csvdatadef, csvDict, apiMonitorEntry):
       if(extr):
          myOp = extr.group(1)
       else:
-         print "unable to determine operand in config for line"      # should probably be determined in initial config file processing section...
+         print "FATAL: unable to determine operand in config for line in nagios metric definition file: " + csvdatadef      # should probably be determined in initial config file processing section...
          exit(0) 
       extr = re.search('^.+?\[(.*)\]', myValueDef)
       if(extr):
          myValue = extr.group(1)
       else:
-         print "malformed config line"     # should probably be determined in initial config file processing section...
+         print "FATAL: malformed config line in Nagios metric definition file: " + csvdatadef     # should probably be determined in initial config file processing section...
          exit(0)
       if(myOp == 'var'):
          if(myValue == 'timestamp'):
             csvLineToWrite = csvLineToWrite + myTimeStamp
          else:
-            print "Unknown internal variable " + myValue + " in config, line: " + csvdatadef      # should probably be determined in initial config file processing section...
+            print "FATAL: Unknown internal variable " + myValue + " in config, line: " + csvdatadef + ". Should be 'timestamp'"      # should probably be determined in initial config file processing section...
             exit(0) 
       elif(myOp == 'literal'):
          csvLineToWrite = csvLineToWrite + "," +  myValue
@@ -80,9 +91,9 @@ def writePiCsvEntry(filename, csvheader, csvdatadef, csvDict, apiMonitorEntry):
          extr = re.search('(.+?)\:', myValue)
          if(extr):
             apiJsonKey = extr.group(1)
-            if debug: print "going to perform regex on item " + apiJsonKey
+            logging.debug("going to perform regex on item " + apiJsonKey)
             if(apiMonitorEntry[apiJsonKey]):
-               #print "found the key, continue on"
+               logging.debug("found the key, continue on")
                csvMetric = apiMonitorEntry[apiJsonKey]
                extr = re.search('.+?\:(.*)', myValue)
                if(extr): 
@@ -91,22 +102,22 @@ def writePiCsvEntry(filename, csvheader, csvdatadef, csvDict, apiMonitorEntry):
                   if(extr):
                      csvLineToWrite = csvLineToWrite + "," + extr.group(1)
                   else:
-                     print "WARNING: no regex match found for regex \"" + myRegex + "\" and string " + csvMetric + ", ignoring. Nagios service: " + apiMonitorEntry['name'] + ", host name: " + apiMonitorEntry['host_name']
-                     if debug: print "apiMonitorEntry is: " + str(apiMonitorEntry)
+                     logging.warning("WARNING: no regex match found for regex \"" + myRegex + "\" and string " + csvMetric + ", ignoring. Nagios service: " + apiMonitorEntry['name'] + ", host name: " + apiMonitorEntry['host_name'])
+                     logging.debug("apiMonitorEntry is: " + str(apiMonitorEntry))
                      noWrite = 1
                else:
-                  print "regex to extract regex value from entry " + myValue + " failed"
+                  logging.error("ERROR: regex to extract regex value from entry " + myValue + " failed")
             else:
-               print "Warning: In monitor " + apiMonitorEntry['name'] + " definition for host " + apiMonitorEntry['host_name'] + ", json entry value with name " + apiJsonKey + " not found, ignoring."
+               logging.warning("WARNING: In monitor " + apiMonitorEntry['name'] + " definition for host " + apiMonitorEntry['host_name'] + ", json entry value with name " + apiJsonKey + " not found, ignoring.")
                noWrite = 1
                csvLineToWrite = csvLineToWrite + "," + "0"
          else:
-            print "problem extracting json entry in variable " + myValue
+            logging.error("ERROR: problem extracting json entry in variable " + myValue)
             
    for metric in csvDict:
-      #print "Metric name: " + metric + ", value: " + csvDict[metric]
+      logging.debug("DEBUG: Metric name: " + metric + ", value: " + csvDict[metric])
       pass
-   if debug: print "PARSING DONE WRITING LINE: " + csvLineToWrite
+   logging.debug("PARSING DONE WRITING LINE: " + csvLineToWrite)
    if(noWrite == 0):
       if(os.path.isfile( mediatorHome + 'nagioscsv/' + filename)):
          thisCsvFile = open( mediatorHome + "nagioscsv/" + filename, "a")
@@ -130,83 +141,75 @@ extr = re.search("(.*)bin", mediatorBinDir)
 if extr:
    mediatorHome = extr.group(1)
 else:
-   print "unable to find mediator home directory. Is it installed properly? bindir = " + mediatorBinDir
+   print "FATAL: unable to find mediator home directory. Is it installed properly? bindir = " + mediatorBinDir
    exit()
 
-#mediatorBinDir = sys.argv[0]
-#extr = re.search("(.*)bin", mediatorBinDir)
-#if extr:
-#   mediatorHome = extr.group(1)
-#   print mediatorHome
-#   exit()
-#else:
-#   print "unable to find mediator home directory. Is it installed properly? bindir = " + mediatorBinDir
-#   exit()
+if(os.path.isdir(mediatorHome + "log")):
+   logging.basicConfig(filename=mediatorHome + 'log/nagios-mediator.log',level=logging.INFO)
+else:
+   print "FATAL: unable to find log directory." 
+   exit()
 
 if(os.path.isdir(mediatorHome + "nagioscsv")):
    csvFileDir = "../nagioscsv/"
 else:
-   print "unable to find nagioscsv directory"
+   print "FATAL: unable to find nagioscsv directory"
    exit()
 
 if(os.path.isfile(mediatorHome + "/config/nagios_config.txt")):
    pass
 else:
-   print "unable to find mediator config file " + mediatorHome + "/config/nagios_config.txt"
+   print "FATAL: unable to find mediator config file " + mediatorHome + "/config/nagios_config.txt"
    exit()
 
 configvars = load_properties(mediatorHome + "/config/nagios_config.txt")
 
-print configvars
-print configvars['hostName']
+logging.debug("Configuration variables are: " + str(configvars))
 
 if 'hostName' in configvars.keys():
    myNagiosHost = configvars['hostName']
-   print "Nagios host is " + myNagiosHost
+   logging.info("Nagios host is " + myNagiosHost)
 else:
-   print "Nagios host name not defined in config file."
+   print "FATAL: Nagios host name not defined in config file."
    exit()
 
 if 'protocol' in configvars.keys():
    myProtocol = configvars['protocol']
-   print "Protocol to use is " + myProtocol
+   logging.info("Protocol to use is " + myProtocol)
 else:
-   print "Protocol (http or https) not defined in config file."
+   print "FATAL: Protocol (http or https) not defined in config file."
    exit()
 
 if 'apikey' in configvars.keys():
    myApiKey = configvars['apikey']
-   print "API key to use: " + myApiKey
+   logging.debug("API key to use: " + myApiKey)
 else:
-   print "API key not defined in config file."
+   print "FATAL: API key not defined in config file."
    exit()
 
 if 'port' in configvars.keys():
    myNagiosPort = configvars['port']
-   print "TCP Port to use: " + myNagiosPort
+   logging.debug("DEBUG: TCP Port to use: " + myNagiosPort)
 else:
-   print "Port number not defined in config file. Defaulting to port 80"
+   print "WARNING: Port number not defined in config file. Defaulting to port 80"
    myNagiosPort = "80"
 
-if 'debug' in configvars.keys():
-   if (configvars['debug'] == '1'):
-      print "Debug enabled..."
-      debug = 1
+if 'logginglevel' in configvars.keys():
+   if (configvars['logginglevel'] in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']):
+      logging.basicConfig(filename=mediatorHome + 'log/nagios-mediator.log',level=configvars['logginglevel'])
+      logging.info("Logging is" + configvars['logginglevel'])
    else:
-      debug = 0
+      logging.info("Unknown log level, default to INFO")
+      
 
 if 'saveApiResponse' in configvars.keys():
    if (configvars['saveApiResponse'] == '1'):
-      print "saving API response under log directory..."
+      logging.info("saving API response under log directory...")
       saveApiResponse = 1
    else:
       saveApiResponse = 0
 
 myTimeStamp = time.strftime("%Y%m%d%H%M%S", time.gmtime())
-#myProtocol = "http"
-#myNagiosHost = "192.168.2.127"
-#myNagiosPort = "80"
-#myApiKey = "ucMCdER6V46mf5HTbSufj73QJVVCN4HBfpaLk08fkdUChBrLpfZLGjSlu4dh8TRG"
 
 serviceStatusQuery = myProtocol + "://" + myNagiosHost + ":" + myNagiosPort + "/nagiosxi/api/v1/objects/servicestatus?apikey=" + myApiKey + "&pretty=1"
 
@@ -244,7 +247,7 @@ configDict = {}
 with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as configline:
    for line in configline:
       if not line.startswith("#") and not line.isspace(): 
-         #if debug: print("splitting line" + line)
+         logging.debug("splitting line" + line)
          data = shlex.split(line)
          nagiosRecord = data[1]
 
@@ -252,9 +255,9 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
 
          if("[timestamp]" in data[0]):
             myFileName = data[0].replace("[timestamp]", myTimeStamp)
-            #if debug: print myFileName
+            logging.debug("File name for monitor " + data[1] + " is "+ myFileName )
          else:
-            print "File name for monitor " + data[1] + " is missing timestamp definition."
+            print "FATAL: File name for monitor " + data[1] + " is missing timestamp definition."
             exit()
 
          configDict.setdefault(nagiosRecord, {})['filename'] = myFileName
@@ -272,12 +275,12 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
                   myCsvKey = extr.group(1)
                else:
                   print "parse error on line " 
-               #if debug: print "extracting csvDataString from " + str(element)
+               logging.debug("extracting csvDataString from " + str(element))
                extr = re.search('.+?\=(.*)', str(element))
                if extr:
                   myCsvDataString = myCsvDataString + '"' + extr.group(1) + '",'
                   myCsvData = extr.group(1)
-                  #if debug: print "extracted csvDataString = " + myCsvDataString
+                  logging.debug("extracted csvDataString = " + myCsvDataString)
                else:
                   print "data definition parse error"
                   exit()
@@ -348,7 +351,7 @@ if(saveApiResponse):
 ##########################################################################################
 
 recordCount = int(parsedServiceStatusContents['recordcount'])
-if debug: print("number of service status records: " + str(recordCount))
+logging.debug("number of service status records: " + str(recordCount))
 
 recordIndex = 0
 while recordIndex < recordCount:
@@ -356,10 +359,10 @@ while recordIndex < recordCount:
    myHostName = parsedServiceStatusContents['servicestatus'][recordIndex]['host_name']
    myServiceName = parsedServiceStatusContents['servicestatus'][recordIndex]['name']
 
-   if debug: print myServiceName
+   logging.debug("Service name: " + myServiceName)
    if(parsedServiceStatusContents['servicestatus'][recordIndex]['performance_data']):
       myPerfData = str(parsedServiceStatusContents['servicestatus'][recordIndex]['performance_data'])
-      #if debug: print("performance_data=" + myPerfData)
+      logging.debug("performance_data=" + myPerfData)
    else:
       pass
 
@@ -371,10 +374,10 @@ while recordIndex < recordCount:
 
    if(myServiceName in configDict):
       # parse csv definition from configuration file to pull out metric values
-      if debug: print "Found matching config entry for " + myServiceName
+      logging.debug("Found matching config entry for " + myServiceName)
       #myConfigItems = split(configDict[myServiceName][csvdata])
       #check to see if the csv file exists for this metric set. If not, create it
-      #print "writing to filename " + configDict[myServiceName]['filename'] + ", csvheader " +  configDict[myServiceName]['csvheader'] + ", data " + configDict[myServiceName]['csvdatadef']
+      logging.debug("writing to filename " + configDict[myServiceName]['filename'] + ", csvheader " +  configDict[myServiceName]['csvheader'] + ", data " + configDict[myServiceName]['csvdatadef'])
       writePiCsvEntry(configDict[myServiceName]['filename'], configDict[myServiceName]['csvheader'], configDict[myServiceName]['csvdatadef'], configDict[myServiceName]['csvDict'], parsedServiceStatusContents['servicestatus'][recordIndex])
         
    else:
@@ -390,20 +393,20 @@ while recordIndex < recordCount:
 
       for recordName in configDict:
          if("match:" in recordName):
-            if debug: print "found config record with match definition: " + recordName
+            logging.debug("found config record with match definition: " + recordName)
             extr = re.search('match:(.*)', recordName)
             if extr:
                 checkMatch = extr.group(1) 
-                if debug: print "checkMatch is: " + checkMatch + " and myServiceName is: " + myServiceName
+                logging.debug("checkMatch is: " + checkMatch + " and myServiceName is: " + myServiceName)
                 if(checkMatch in myServiceName):
                    monitorRecord = "match:" + checkMatch
                    writePiCsvEntry(configDict[monitorRecord]['filename'], configDict[monitorRecord]['csvheader'], configDict[monitorRecord]['csvdatadef'], configDict[monitorRecord]['csvDict'], parsedServiceStatusContents['servicestatus'][recordIndex])
-                   if debug: print "Found a substring match for service"
-                   if debug: print "===================================="
+                   logging.debug("Found a substring match for service")
+                   logging.debug("====================================")
             
          else:
             pass
-            #if debug: print "No config entry for " + myServiceName
+            logging.debug("No config entry for " + myServiceName)
             ##########################
             #
             #  No explicit or "match:" definitions found in the config for this monitor API record
