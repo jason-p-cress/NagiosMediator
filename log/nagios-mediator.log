@@ -1,0 +1,56 @@
+INFO:root:Nagios host is 192.168.2.127
+INFO:root:Protocol to use is http
+INFO:root:Logging isDEBUG
+INFO:root:saving API response under log directory...
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;1023;409;0;2047, ignoring. Nagios service: Swap Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;0;0;0;2047, ignoring. Nagios service: Swap Usage, host name: localhost
+INFO:root:Nagios host is 192.168.2.127
+INFO:root:Protocol to use is http
+INFO:root:Logging isDEBUG
+INFO:root:saving API response under log directory...
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;1023;409;0;2047, ignoring. Nagios service: Swap Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;0;0;0;2047, ignoring. Nagios service: Swap Usage, host name: localhost
+INFO:root:Nagios host is 192.168.2.127
+INFO:root:Protocol to use is http
+INFO:root:Logging isDEBUG
+INFO:root:saving API response under log directory...
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;1023;409;0;2047, ignoring. Nagios service: Swap Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;0;0;0;2047, ignoring. Nagios service: Swap Usage, host name: localhost
+WARNING:root:WARNING: In monitor Users definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Total Processes definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Load definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor / Disk Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor / Disk Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: no regex match found for regex "total=(.+?)MB" and string &apos;available&apos;=0.39GiB;4;6; &apos;total&apos;=8.00GiB;4;6; &apos;free&apos;=0.39GiB;4;6; &apos;used&apos;=7.61GiB;4;6;, ignoring. Nagios service: Memory Usage, host name: 10.100.100.173
+WARNING:root:WARNING: no regex match found for regex "used=(.+?)MB" and string &apos;available&apos;=0.39GiB;4;6; &apos;total&apos;=8.00GiB;4;6; &apos;free&apos;=0.39GiB;4;6; &apos;used&apos;=7.61GiB;4;6;, ignoring. Nagios service: Memory Usage, host name: 10.100.100.173
+WARNING:root:WARNING: no regex match found for regex "swap=(.+?)MB" and string &apos;total&apos;=15.99GiB;8;13; &apos;used&apos;=8.79GiB;8;13; &apos;free&apos;=7.20GiB;8;13;, ignoring. Nagios service: Swap Usage, host name: 10.100.100.173
+INFO:root:Nagios host is 192.168.2.127
+INFO:root:Protocol to use is http
+INFO:root:Logging isDEBUG
+INFO:root:saving API response under log directory...
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;1023;409;0;2047, ignoring. Nagios service: Swap Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "&apos;total&apos;=(.+?)GiB" and string total=1829MB free=1039MB used=695MB shared=96MB buffers_and_cached=761MB, ignoring. Nagios service: Memory Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "&apos;used&apos;=(.+?)GiB" and string total=1829MB free=1039MB used=695MB shared=96MB buffers_and_cached=761MB, ignoring. Nagios service: Memory Usage, host name: nagiosxi
+WARNING:root:WARNING: no regex match found for regex "used&apos;=(.+?)GiB" and string swap=1987MB;0;0;0;2047, ignoring. Nagios service: Swap Usage, host name: localhost
+WARNING:root:WARNING: In monitor Users definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Total Processes definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Memory Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor Load definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor CPU Stats definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor / Disk Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: In monitor / Disk Usage definition for host 192.168.2.108, json entry value with name performance_data not found, ignoring.
+WARNING:root:WARNING: no regex match found for regex "total=(.+?)MB" and string &apos;available&apos;=0.39GiB;4;6; &apos;total&apos;=8.00GiB;4;6; &apos;free&apos;=0.39GiB;4;6; &apos;used&apos;=7.61GiB;4;6;, ignoring. Nagios service: Memory Usage, host name: 10.100.100.173
+WARNING:root:WARNING: no regex match found for regex "used=(.+?)MB" and string &apos;available&apos;=0.39GiB;4;6; &apos;total&apos;=8.00GiB;4;6; &apos;free&apos;=0.39GiB;4;6; &apos;used&apos;=7.61GiB;4;6;, ignoring. Nagios service: Memory Usage, host name: 10.100.100.173
+WARNING:root:WARNING: no regex match found for regex "swap=(.+?)MB" and string &apos;total&apos;=15.99GiB;8;13; &apos;used&apos;=8.79GiB;8;13; &apos;free&apos;=7.20GiB;8;13;, ignoring. Nagios service: Swap Usage, host name: 10.100.100.173

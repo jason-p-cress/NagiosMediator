@@ -22,16 +22,6 @@ import StringIO
 import logging
 
 
-############################
-#
-#  Function to print to log file
-#
-###############################
-
-def printlog(logentry, logfile):
-   pass
-
-
 #############################
 #
 #  Funciton to read configuration file
@@ -124,7 +114,7 @@ def writePiCsvEntry(filename, csvheader, csvdatadef, csvDict, apiMonitorEntry):
          thisCsvFile.write(csvLineToWrite + "\n")
          thisCsvFile.close()
       else:
-         thisCsvFile = open( mediatorHome + "nagioscsv/" + filename, "w")
+         thisCsvFile = open( mediatorHome + "nagioscsv/" + filename, "a")
          thisCsvFile.write(csvheader + "\n")
          thisCsvFile.write(csvLineToWrite + "\n")
          thisCsvFile.close()
@@ -221,35 +211,41 @@ serviceStatusQuery = myProtocol + "://" + myNagiosHost + ":" + myNagiosPort + "/
 #
 #  Create the following dict object mapping out the configuration file:
 #
-#  configDict
-#            [<Service Name>]
-#	                   [csvheader]=csv header definition for associated file
-#                          [filename]=filename to write csv data
-#                          [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
-#                          [csvDict]
-#                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
-#                          [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
-#                          [csvDict]
-#                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
-#                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
-#                                   [csv metric]=operation (value/regex/etc), api attribute, and regex
-#                                   ...
-#                                   ...
-#                                   ...
-#            [<Service Name>]
-#                           ...
-#                           ...
-#                           ...
+#  configDict:
+#  
+#      [<Service Index>]
+#         [servicename]=the name of the Nagios monitor record or service
+#         [csvheader]=csv header definition for associated file
+#         [filename]=filename to write csv data
+#         [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
+#         [csvDict]
+#            [csv metric]=operation (value/regex/etc), api attribute, and regex
+#            [csvdata]=regex extraction definition (defines which api response attribute e.g. performance_data and the regex used)
+#            [csvDict]
+#               [csv metric]=operation (value/regex/etc), api attribute, and regex
+#               [csv metric]=operation (value/regex/etc), api attribute, and regex
+#               [csv metric]=operation (value/regex/etc), api attribute, and regex
+#               ...
+#               ...
+#               ... ( + # of csv columns for this file)
+#      [<Service Index>] ( + # of service definitions in configuration file)
+#         [<Service Name>]
+#            ...
+#            ...
+#            ...
 #
 ###############################################################
 
 configDict = {}
+configLineNumber = 0
+
 with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as configline:
    for line in configline:
       if not line.startswith("#") and not line.isspace(): 
          logging.debug("splitting line" + line)
          data = shlex.split(line)
-         nagiosRecord = data[1]
+         # -- REFACTOR TO INDEXING CONFIG DICT -- nagiosRecord = data[1]
+         nagiosRecord = configLineNumber
 
          # evaluate filename config definition and sub in <timestamp>. If <timestamp> doesn't exist, error out
 
@@ -260,6 +256,7 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
             print "FATAL: File name for monitor " + data[1] + " is missing timestamp definition."
             exit()
 
+         configDict.setdefault(nagiosRecord, {})['servicename'] = data[1]
          configDict.setdefault(nagiosRecord, {})['filename'] = myFileName
          configDict.setdefault(nagiosRecord, {})['csvdata'] = data[2]
 
@@ -305,8 +302,13 @@ with open( mediatorHome + "/config/nagios_metric_file_definitions.txt", "r") as 
                      print "   " + othermonitor + " csv format in config: " + configDict[othermonitor]['csvheader']
                      exit()
 
+      configLineNumber = configLineNumber + 1
 	
-		
+############################
+#
+#  Begins here...
+#
+############################		
 
 
 ############################
@@ -338,6 +340,11 @@ print "API read completed"
 #   parsedServiceStatusContents = json.load(f)
 #saveApiResponse=0 
 
+#########
+#
+# Write the API response to log directory if requested in config file
+#
+#####################################################################
 
 if(saveApiResponse):
    serviceStatusApiOutput = open( mediatorHome + "/log/serviceStatusApiOutput.json", "w")
@@ -365,53 +372,40 @@ while recordIndex < recordCount:
       logging.debug("performance_data=" + myPerfData)
    else:
       pass
+      logging.debug("WARNING: no performance data found for Nagios monitor record: " + myServiceName)
 
    #########################
    # 
-   #  Check to see if there are any explicit matches for this record in the configuration dictionary
+   #  Check to see if there are any matches (explicit or substring) for this record in the configuration dictionary
    #
-   #################################################################################################
+   ################################################################################################################
 
-   if(myServiceName in configDict):
-      # parse csv definition from configuration file to pull out metric values
-      logging.debug("Found matching config entry for " + myServiceName)
-      #myConfigItems = split(configDict[myServiceName][csvdata])
-      #check to see if the csv file exists for this metric set. If not, create it
-      logging.debug("writing to filename " + configDict[myServiceName]['filename'] + ", csvheader " +  configDict[myServiceName]['csvheader'] + ", data " + configDict[myServiceName]['csvdatadef'])
-      writePiCsvEntry(configDict[myServiceName]['filename'], configDict[myServiceName]['csvheader'], configDict[myServiceName]['csvdatadef'], configDict[myServiceName]['csvDict'], parsedServiceStatusContents['servicestatus'][recordIndex])
-        
-   else:
-
-      ###########################
-      #
-      #  No explicit matches in the configuration dictionary for this monitor...
-      #  check to see if this monitor matches any "match" monitor definitions in the config
-      #  There is probably a better way to do this, but unless the customer config file is
-      #  ginormous it shouldn't be too much of an impact on performance
-      #
-      #####################################################################################
-
-      for recordName in configDict:
-         if("match:" in recordName):
-            logging.debug("found config record with match definition: " + recordName)
-            extr = re.search('match:(.*)', recordName)
-            if extr:
-                checkMatch = extr.group(1) 
-                logging.debug("checkMatch is: " + checkMatch + " and myServiceName is: " + myServiceName)
-                if(checkMatch in myServiceName):
-                   monitorRecord = "match:" + checkMatch
-                   writePiCsvEntry(configDict[monitorRecord]['filename'], configDict[monitorRecord]['csvheader'], configDict[monitorRecord]['csvdatadef'], configDict[monitorRecord]['csvDict'], parsedServiceStatusContents['servicestatus'][recordIndex])
-                   logging.debug("Found a substring match for service")
-                   logging.debug("====================================")
-            
+   
+   for serviceIndex in configDict:
+      substringMatch = 0
+      extr = re.search('match:(.*)', configDict[serviceIndex]['servicename'])
+      if extr:
+         checkMatch = extr.group(1)
+         if(checkMatch in myServiceName):
+            logging.debug("Match on substring test for monitor config record: " + myServiceName)
+            logging.debug("checkMatch is: " + checkMatch + " and myServiceName is: " + myServiceName)
+            substringMatch = 1 
          else:
-            pass
-            logging.debug("No config entry for " + myServiceName)
-            ##########################
-            #
-            #  No explicit or "match:" definitions found in the config for this monitor API record
-            #
-            ###################################################################################
+            checkMatch = "not-substring-match"
+         
+      if((configDict[serviceIndex]['servicename'] == myServiceName) or (substringMatch == 1)):
+         logging.debug("Found matching config entry for " + myServiceName + " and config record " + configDict[serviceIndex]['servicename'])
+         logging.debug("writing to filename " + configDict[serviceIndex]['filename'] + ", csvheader " +  configDict[serviceIndex]['csvheader'] + ", data " + configDict[serviceIndex]['csvdatadef'])
+         writePiCsvEntry(configDict[serviceIndex]['filename'], configDict[serviceIndex]['csvheader'], configDict[serviceIndex]['csvdatadef'], configDict[serviceIndex]['csvDict'], parsedServiceStatusContents['servicestatus'][recordIndex])
+        
+            
+      else:
+         pass
+         logging.debug("No config entry for " + myServiceName)
+         ##########################
+         #
+         #  No explicit or "match:" definitions found in the config for this monitor API record
+         #
+         ###################################################################################
 
    recordIndex = recordIndex + 1
-

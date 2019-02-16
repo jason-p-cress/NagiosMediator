@@ -2,6 +2,7 @@
 # Default Out-of-Box vanilla NagiosXI 5.5.8 monitor definitions:
 #
 #PI Filename			MonitorRecord	CSV Definition
+#
 cpuStats[timestamp].csv		"CPU Stats"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"user=(.+?)\%"],"system"=regex[performance_data:"system=(.+?)\%"],"iowait"=regex[performance_data:"iowait=(.+?)\%"],"idle"=regex[performance_data:"idle=(.+?)\%"]
 cpuLoad[timestamp].csv		"Current Load"	"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
 cpuLoad[timestamp].csv		"Load"		"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
@@ -29,3 +30,11 @@ cpuStats[timestamp].csv		"CPU Load NT"	"timestamp"=var[timestamp],"host name"=va
 # macOS Nagios default monitor for swap usage is under Memory Usage monitor for Nagios (output is different from other default monitors) (Jason's lab)
 #
 #swapUsage[timestamp].csv       "Memory Usage"  "timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:".+?swpUsed=(.+?)%"]
+#
+# NCPA agent for Windows monitors
+#
+cpuStats[timestamp].csv		"CPU Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=literal[0],"system"=regex[performance_data:"percent&apos;=(.+?)\%;"],"iowait"=literal[0],"idle"=literal[0]
+diskUsage[timestamp].csv	match:"Disk Usage on"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[name:"Disk Usage on (.*)"],"disk used"=regex[performance_data:"&apos;used&apos;=(.+?)GiB"]
+memoryData[timestamp].csv	"Memory Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=regex[performance_data:"&apos;total&apos;=(.+?)GiB"],"memory used"=regex[performance_data:"&apos;used&apos;=(.+?)GiB"]
+users[timestamp].csv		"User Count"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=regex[performance_data:"&apos;count&apos;=(.+?);"]
+swapUsage[timestamp].csv	"Swap Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:"used&apos;=(.+?)GiB"]
