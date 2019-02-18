@@ -1,4 +1,4 @@
-1. Verify all regex in config file as to its validity, to avoid runtime errors:
+1. Verify all regex in config file as to its validity, to avoid runtime errors: 
    
    try:
       re.compile(*regex statement*)
@@ -6,18 +6,22 @@
    except re.error
       is_valid = false
 
-2. Verify that any monitoring names or other keys actually exist in the API response to avoid runtime errors
+   Priority: HIGH
+
+2. Verify that any monitoring names or other keys actually exist in the API response to avoid runtime errors. Priority: HIGH
 
 DONE 021119: 3. Move all configuration items (e.g. API endpoint, etc) into a configuration file under $nagios_mediator_home/config, rather than in the code
 
 DONE 020819: 4. File paths as part of config file as well, rather than in the code (../log, ../config, etc)
 
-5. More testing to break metric configuration file to ensure avoidance of runtime errors
+5. More testing to break metric configuration file to ensure avoidance of runtime errors. Priority: HIGH
 
-6. Better error handling if the API endpoint doesn't respond, or generates an error (e.g. invalid API key), also add timeout
+6. Better error handling if the API endpoint doesn't respond, or generates an error (e.g. invalid API key), also add timeout. Priority: HIGH
 
 DONE 021519: 7. Warnings and errors to log file rather than stdout
 
-8. Syntax checking and properties verification in nagios_config.txt configuration file
+8. Syntax checking and properties verification in nagios_config.txt configuration file. Priority: HIGH
 
-9. Provide "un-webify" and "un-escape" response options (e.g., convert "&amp;" to "&" and "\/" to "/")
+9. Provide "un-webify" and "un-escape" response options (e.g., convert "&amp;" to "&" and "\/" to "/"). Priority: LOW
+
+10. Documentation. Priority: HIGH
