@@ -20,3 +20,4 @@ DONE 021519: 7. Warnings and errors to log file rather than stdout
 
 8. Syntax checking and properties verification in nagios_config.txt configuration file
 
+9. Provide "un-webify" and "un-escape" response options (e.g., convert "&amp;" to "&" and "\/" to "/")

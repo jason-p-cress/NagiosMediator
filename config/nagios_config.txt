@@ -8,3 +8,4 @@ password=nagios
 installpath=/home/jcress/Development/IBM-Field-Solutions/Nagios558Mediator/
 logginglevel=DEBUG
 saveApiResponse=1
+unWebify=0
