@@ -45,3 +45,8 @@ diskUsage[timestamp].csv        "/ Disk Usage"  "timestamp"=var[timestamp],"host
 cpuStats[timestamp].csv		"CPU Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=literal[0],"system"=regex[performance_data:"cpu_prct_used=(.+?)\%;"],"iowait"=literal[0],"idle"=literal[0]
 memoryData[timestamp].csv	"Memory Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=regex[performance_data:".*;(.*)$"],"memory used"=regex[performance_data:"&apos;Physical_memory&apos;=(.+?)MB"]
 swapUsage[timestamp].csv	"Swap Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"swap data"=regex[performance_data:"&apos;Swap_space&apos;=(.+?)MB"]
+#
+# Network monitoring for interface bandwidth. Note that this is currently not part of the pamodel, but for future
+# consideration.
+#
+networkUtilization[timestamp].csv	match:"Bandwidth"	"timestamp"=var[timestamp],"host name"=value[host_name],"interface"=regex[name:"^(.+?) Bandwidth"],"inbound utilization"=regex[performance_data:"in=(.+?)Mb.*"],"outbound utilization"=regex[performance_data:".+?out=(.+?)Mb.*"]
