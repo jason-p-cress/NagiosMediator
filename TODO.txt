@@ -25,3 +25,8 @@ DONE 021519: 7. Warnings and errors to log file rather than stdout
 9. Provide "un-webify" and "un-escape" response options (e.g., convert "&amp;" to "&" and "\/" to "/"). Priority: LOW
 
 10. Documentation. Priority: HIGH
+
+11. Log file trimming. Priority: LOW
+
+12. Clean any API responses of commas "just in case". Priority: LOW
+
