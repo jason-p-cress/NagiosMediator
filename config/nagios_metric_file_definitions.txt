@@ -49,4 +49,11 @@ swapUsage[timestamp].csv	"Swap Usage"	"timestamp"=var[timestamp],"host name"=val
 # Network monitoring for interface bandwidth. Note that this is currently not part of the distribution pamodel, but 
 # rather is included as an example for future consideration or end-user customization
 #
-#networkUtilization[timestamp].csv	match:"Bandwidth"	"timestamp"=var[timestamp],"host name"=value[host_name],"interface"=regex[name:"^(.+?) Bandwidth"],"inbound utilization"=regex[performance_data:"in=(.+?)Mb.*"],"outbound utilization"=regex[performance_data:".+?out=(.+?)Mb.*"]
+networkUtilization[timestamp].csv	match:"Bandwidth"	"timestamp"=var[timestamp],"host name"=value[host_name],"interface"=regex[name:"^(.+?) Bandwidth"],"inbound utilization"=regex[performance_data:"in=(.+?)Mb.*"],"outbound utilization"=regex[performance_data:".+?out=(.+?)Mb.*"]
+#
+# Nagios VMWare ESXi monitoring
+#
+networkUtilization[timestamp].csv	"Networking for VMHost"	"timestamp"=var[timestamp],"host name"=value[host_name],"interface"=literal["aggregate"],"inbound utilization"=regex[performance_data:"net_receive=(.+?);.*"],"outbound utilization"=regex[performance_data:".*net_send=(.+?);.*"]
+memoryData[timestamp].csv	"Memory for VMHost"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=literal[0],"memory used"=regex[performance_data:"mem_usagemb=(.+?)MB.*"]
+diskUsage[timestamp].csv	"Datastore usage for VMHost"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[performance_data:"^(.*)=.*"],"disk used"=regex[performance_data:".+?=(.+?)MB"]
+cpuStats[timestamp].csv		"CPU Usage for VMHost"	"timestamp"=var[timestamp],"host name"=value[host_name],"user"=literal[0],"system"=regex[performance_data:".*cpu_usage=(.+?)\%;"],"iowait"=literal[0],"idle"=literal[0]
