@@ -360,10 +360,10 @@
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
-          <dataType>Number</dataType>
+          <dataType>String</dataType>
           <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.0">
             <expression>
-              <expression></expression>
+              <expression>yyyyMMddHHmmss</expression>
             </expression>
           </mapping>
         </timestampKey>
@@ -413,10 +413,10 @@
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
-          <dataType>Number</dataType>
+          <dataType>String</dataType>
           <mapping source="#//@datasource.0/@model/@sources.8/@dataEntitySource.0">
             <expression>
-              <expression></expression>
+              <expression>yyyyMMddHHmmss</expression>
             </expression>
           </mapping>
         </timestampKey>
@@ -499,10 +499,10 @@
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
-          <dataType>Number</dataType>
+          <dataType>String</dataType>
           <mapping source="#//@datasource.0/@model/@sources.7/@dataEntitySource.0">
             <expression>
-              <expression></expression>
+              <expression>yyyyMMddHHmmss</expression>
             </expression>
           </mapping>
         </timestampKey>
@@ -552,10 +552,10 @@
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
-          <dataType>Number</dataType>
+          <dataType>String</dataType>
           <mapping source="#//@datasource.0/@model/@sources.6/@dataEntitySource.0">
             <expression>
-              <expression></expression>
+              <expression>yyyyMMddHHmmss</expression>
             </expression>
           </mapping>
         </timestampKey>
@@ -780,7 +780,7 @@
       </sources>
       <filters/>
     </model>
-    <config xsi:type="tasp:FileSystemConfig" timeFormat="yyyyMMddHHmmss">
+    <config xsi:type="tasp:FileSystemConfig" tzone="America/Los_Angeles" timeFormat="yyyyMMddHHmmss">
       <name>Nagios</name>
       <path>/opt/IBM/scanalytics/mediators/Nagios558Mediator/nagioscsv</path>
       <pattern>([a-zA-Z]\w*)(\d{4}\d{2}\d{2}\d{2}\d{2}\d{2}).*\.csv</pattern>
