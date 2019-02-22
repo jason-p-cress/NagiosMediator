@@ -82,6 +82,7 @@ This configuration file allows you to define:
 	   expression extraction of data from a JSON attribute, or a literal value
 
 
+... more to come
 
  
    
