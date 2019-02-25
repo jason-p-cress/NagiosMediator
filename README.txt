@@ -4,7 +4,7 @@ Extensible NagiosXI Mediator for IBM Predictive Insights
 Introduction
 ============
 
-This mediator provides the ingest performance metrics from a Nagios XI installation using
+This mediator provides ingestion of performance metrics from a Nagios XI installation using
 the NagiosXI API interface. The performance metrics of interest can be user-defined within
 the config/nagios_metric_file_definitions.txt. As such, any custom Nagios plugins, whether
 they be provided by Nagios, by the user community, or customer specific, can be utilized
@@ -79,10 +79,16 @@ This configuration file allows you to define:
 	1. The Monitor Record you want to pull performance data from (which is servicestatus->name in the API response)
 	2. The CSV file you want to write the performance data to (generally matching one of the above files)
 	3. The structure of the CSV and the method of extraction of data (e.g. from a JSON attribute, a regular
-	   expression extraction of data from a JSON attribute, or a literal value
+	   expression extraction of data from a JSON attribute, or a literal value. Examples:
+
+           var[timestamp]  --  inserts the current timestamp into this column of the CSV file
+           value[host_name]  --  inserts the value of the attribute 'host_name' for this monitor's JSON response
+           regex[performance_data:"load5=(.+?)\;"]  --  extracts text from the attribute 'performance_data' for this
+                                                        for this monitor's JSON response
+           literal[0]  --  inserts the literal value of 0 into this column of the CSV file
 
 
-... more to come
+... more documentation to follow
 
  
    
