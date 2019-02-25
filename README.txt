@@ -44,6 +44,13 @@ Installation
 9. Deploy the NAGIOS558.pamodel definition to the desired topic using the PI mediation tool. The default model can be
    found in the 'pamodel' directory of the location where you unzipped the mediator pack.
 
+10. Start the extractor instance using the 'admin.sh' utility under $PI_HOME/bin/. For example:
+
+    >>run_extractor_instance -m=EXTRACT -s=20190201-0000 -t=NAGIOS
+
+   ... will start extracting data beginning on Feb 1 2019 at midnight, and continue to extrace data until stopped.
+
+
 Configuring the mediator
 ========================
 
