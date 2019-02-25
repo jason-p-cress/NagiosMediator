@@ -121,7 +121,9 @@ structure of the networkUtilization CSV file is as follows:
 
 In general, default monitors for servers do not include network utilization data. If you are monitoring network
 devices, this information is usually included by default. Also, the VMware default monitors include aggregate
-network utilization.
+network utilization. The example metric definition file included in this distribution includes entries for both
+network device utilization (using the Network Switch / Router wizard provided in Nagios) and for VMWare network
+utilization (enabled by default using the Nagios VMWare wizard).
 
 
 ... more documentation to follow

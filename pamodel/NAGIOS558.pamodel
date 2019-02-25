@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tasp:TopicConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tasp="http://www.ibm.com/tivoli/netcool/tasp">
-  <name>NAGIOS558</name>
+  <name>NAGIOS</name>
   <DataSourceInstance>
     <name>Nagios</name>
     <model>
       <name>Nagios</name>
       <groups>
-        <name>CPUUsageGroup</name>
+        <name>DiskUsageGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -21,7 +21,7 @@
           <name>ResourceKey</name>
           <enabled>true</enabled>
           <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.0/@dataEntitySource.1">
+          <mapping source="#//@datasource.0/@model/@sources.0/@dataEntitySource.1 #//@datasource.0/@model/@sources.0/@dataEntitySource.2">
             <expression>
               <expression></expression>
             </expression>
@@ -46,20 +46,30 @@
             </expression>
           </mapping>
         </attributes>
-        <metrics>
-          <name>CpuUsage</name>
+        <attributes>
+          <name>Service</name>
           <enabled>true</enabled>
-          <dataType>Number</dataType>
+          <dataType>String</dataType>
           <mapping source="#//@datasource.0/@model/@sources.0/@dataEntitySource.2">
             <expression>
-              <expression></expression>
+              <expression>equals</expression>
             </expression>
           </mapping>
-          <timeAggrType>Avg</timeAggrType>
+        </attributes>
+        <metrics>
+          <name>DiskUsed</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.0/@dataEntitySource.3">
+            <expression>
+              <name>DiskUsed</name>
+              <expression>equals</expression>
+            </expression>
+          </mapping>
         </metrics>
       </groups>
       <groups>
-        <name>DiskUsageGroup</name>
+        <name>MemoryDataGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -74,7 +84,7 @@
           <name>ResourceKey</name>
           <enabled>true</enabled>
           <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.1/@dataEntitySource.1 #//@datasource.0/@model/@sources.1/@dataEntitySource.2">
+          <mapping source="#//@datasource.0/@model/@sources.1/@dataEntitySource.1">
             <expression>
               <expression></expression>
             </expression>
@@ -99,30 +109,31 @@
             </expression>
           </mapping>
         </attributes>
-        <attributes>
-          <name>Service</name>
+        <metrics>
+          <name>MemoryTotal</name>
           <enabled>true</enabled>
-          <dataType>String</dataType>
+          <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.1/@dataEntitySource.2">
             <expression>
+              <name>MemoryTotal</name>
               <expression>equals</expression>
             </expression>
           </mapping>
-        </attributes>
+        </metrics>
         <metrics>
-          <name>DiskUsed</name>
+          <name>MemoryUsed</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.1/@dataEntitySource.3">
             <expression>
-              <name>DiskUsed</name>
+              <name>MemoryUsed</name>
               <expression>equals</expression>
             </expression>
           </mapping>
         </metrics>
       </groups>
       <groups>
-        <name>MemoryDataGroup</name>
+        <name>PingDataGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -163,30 +174,30 @@
           </mapping>
         </attributes>
         <metrics>
-          <name>MemoryTotal</name>
+          <name>PingRtaValue</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.2/@dataEntitySource.2">
             <expression>
-              <name>MemoryTotal</name>
-              <expression>equals</expression>
+              <expression></expression>
             </expression>
           </mapping>
+          <timeAggrType>Avg</timeAggrType>
         </metrics>
         <metrics>
-          <name>MemoryUsed</name>
+          <name>PingPlValue</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.2/@dataEntitySource.3">
             <expression>
-              <name>MemoryUsed</name>
-              <expression>equals</expression>
+              <expression></expression>
             </expression>
           </mapping>
+          <timeAggrType>Avg</timeAggrType>
         </metrics>
       </groups>
       <groups>
-        <name>PingDataGroup</name>
+        <name>SwapUsageGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -227,7 +238,7 @@
           </mapping>
         </attributes>
         <metrics>
-          <name>PingRtaValue</name>
+          <name>SwapData</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.3/@dataEntitySource.2">
@@ -237,20 +248,9 @@
           </mapping>
           <timeAggrType>Avg</timeAggrType>
         </metrics>
-        <metrics>
-          <name>PingPlValue</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.3/@dataEntitySource.3">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
       </groups>
       <groups>
-        <name>SwapUsageGroup</name>
+        <name>TotalProcessGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -291,7 +291,7 @@
           </mapping>
         </attributes>
         <metrics>
-          <name>SwapData</name>
+          <name>TotalProcesses</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.4/@dataEntitySource.2">
@@ -303,113 +303,7 @@
         </metrics>
       </groups>
       <groups>
-        <name>TotalProcessGroup</name>
-        <timestampKey>
-          <name>Timestamp</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.0">
-            <expression>
-              <expression>yyyyMMddHHmmss</expression>
-            </expression>
-          </mapping>
-        </timestampKey>
-        <resourceKey>
-          <name>ResourceKey</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.1">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-        </resourceKey>
-        <attributes>
-          <name>Node</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.1">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-        </attributes>
-        <attributes>
-          <name>dataSourceType</name>
-          <dataType>String</dataType>
-          <mapping>
-            <expression>
-              <expression>'ITM'</expression>
-            </expression>
-          </mapping>
-        </attributes>
-        <metrics>
-          <name>TotalProcesses</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.2">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
-      </groups>
-      <groups>
         <name>UsersGroup</name>
-        <timestampKey>
-          <name>Timestamp</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.0">
-            <expression>
-              <expression>yyyyMMddHHmmss</expression>
-            </expression>
-          </mapping>
-        </timestampKey>
-        <resourceKey>
-          <name>ResourceKey</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.1">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-        </resourceKey>
-        <attributes>
-          <name>Node</name>
-          <enabled>true</enabled>
-          <dataType>String</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.1">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-        </attributes>
-        <attributes>
-          <name>dataSourceType</name>
-          <dataType>String</dataType>
-          <mapping>
-            <expression>
-              <expression>'Nagios'</expression>
-            </expression>
-          </mapping>
-        </attributes>
-        <metrics>
-          <name>User</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.2">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
-      </groups>
-      <groups>
-        <name>CpustatsGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -460,42 +354,9 @@
           </mapping>
           <timeAggrType>Avg</timeAggrType>
         </metrics>
-        <metrics>
-          <name>System</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.8/@dataEntitySource.3">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
-        <metrics>
-          <name>Iowait</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.8/@dataEntitySource.4">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
-        <metrics>
-          <name>Idle</name>
-          <enabled>true</enabled>
-          <dataType>Number</dataType>
-          <mapping source="#//@datasource.0/@model/@sources.8/@dataEntitySource.5">
-            <expression>
-              <expression></expression>
-            </expression>
-          </mapping>
-          <timeAggrType>Avg</timeAggrType>
-        </metrics>
       </groups>
       <groups>
-        <name>CpuloadGroup</name>
+        <name>CpustatsGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -536,7 +397,7 @@
           </mapping>
         </attributes>
         <metrics>
-          <name>Load5</name>
+          <name>User</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.7/@dataEntitySource.2">
@@ -546,9 +407,42 @@
           </mapping>
           <timeAggrType>Avg</timeAggrType>
         </metrics>
+        <metrics>
+          <name>System</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.7/@dataEntitySource.3">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
+        <metrics>
+          <name>Iowait</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.7/@dataEntitySource.4">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
+        <metrics>
+          <name>Idle</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.7/@dataEntitySource.5">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
       </groups>
       <groups>
-        <name>HttpdataGroup</name>
+        <name>CpuloadGroup</name>
         <timestampKey>
           <name>Timestamp</name>
           <enabled>true</enabled>
@@ -589,7 +483,7 @@
           </mapping>
         </attributes>
         <metrics>
-          <name>HttpData</name>
+          <name>Load5</name>
           <enabled>true</enabled>
           <dataType>Number</dataType>
           <mapping source="#//@datasource.0/@model/@sources.6/@dataEntitySource.2">
@@ -600,21 +494,133 @@
           <timeAggrType>Avg</timeAggrType>
         </metrics>
       </groups>
-      <sources>
-        <name>cpuUsage</name>
-        <DataEntitySource>
-          <name>timestamp</name>
-          <dataType>Number</dataType>
-        </DataEntitySource>
-        <DataEntitySource>
-          <name>host name</name>
+      <groups>
+        <name>HttpdataGroup</name>
+        <timestampKey>
+          <name>Timestamp</name>
+          <enabled>true</enabled>
           <dataType>String</dataType>
-        </DataEntitySource>
-        <DataEntitySource>
-          <name>cpu usage</name>
+          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.0">
+            <expression>
+              <expression>yyyyMMddHHmmss</expression>
+            </expression>
+          </mapping>
+        </timestampKey>
+        <resourceKey>
+          <name>ResourceKey</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.1">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+        </resourceKey>
+        <attributes>
+          <name>Node</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.1">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+        </attributes>
+        <attributes>
+          <name>dataSourceType</name>
+          <dataType>String</dataType>
+          <mapping>
+            <expression>
+              <expression>'Nagios'</expression>
+            </expression>
+          </mapping>
+        </attributes>
+        <metrics>
+          <name>HttpData</name>
+          <enabled>true</enabled>
           <dataType>Number</dataType>
-        </DataEntitySource>
-      </sources>
+          <mapping source="#//@datasource.0/@model/@sources.5/@dataEntitySource.2">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
+      </groups>
+      <groups>
+        <name>NetworkutilizationGroup</name>
+        <timestampKey>
+          <name>Timestamp</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.0">
+            <expression>
+              <expression>yyyyMMddHHmmss</expression>
+            </expression>
+          </mapping>
+        </timestampKey>
+        <resourceKey>
+          <name>ResourceKey</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.1 #//@datasource.0/@model/@sources.9/@dataEntitySource.2">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+        </resourceKey>
+        <attributes>
+          <name>Node</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.1">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+        </attributes>
+        <attributes>
+          <name>Service</name>
+          <enabled>true</enabled>
+          <dataType>String</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.2">
+            <expression>
+              <expression>equals</expression>
+            </expression>
+          </mapping>
+        </attributes>
+        <attributes>
+          <name>dataSourceType</name>
+          <dataType>String</dataType>
+          <mapping>
+            <expression>
+              <expression>'Nagios'</expression>
+            </expression>
+          </mapping>
+        </attributes>
+        <metrics>
+          <name>InboundUtilization</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.3">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
+        <metrics>
+          <name>OutboundUtilization</name>
+          <enabled>true</enabled>
+          <dataType>Number</dataType>
+          <mapping source="#//@datasource.0/@model/@sources.9/@dataEntitySource.4">
+            <expression>
+              <expression></expression>
+            </expression>
+          </mapping>
+          <timeAggrType>Avg</timeAggrType>
+        </metrics>
+      </groups>
       <sources>
         <name>diskUsage</name>
         <DataEntitySource>
@@ -631,10 +637,6 @@
         </DataEntitySource>
         <DataEntitySource>
           <name>disk used</name>
-          <dataType>Number</dataType>
-        </DataEntitySource>
-        <DataEntitySource>
-          <name>disk free</name>
           <dataType>Number</dataType>
         </DataEntitySource>
       </sources>
@@ -775,6 +777,29 @@
         </DataEntitySource>
         <DataEntitySource>
           <name>user</name>
+          <dataType>Number</dataType>
+        </DataEntitySource>
+      </sources>
+      <sources>
+        <name>networkUtilization</name>
+        <DataEntitySource>
+          <name>timestamp</name>
+          <dataType>Number</dataType>
+        </DataEntitySource>
+        <DataEntitySource>
+          <name>host name</name>
+          <dataType>String</dataType>
+        </DataEntitySource>
+        <DataEntitySource>
+          <name>interface</name>
+          <dataType>String</dataType>
+        </DataEntitySource>
+        <DataEntitySource>
+          <name>inbound utilization</name>
+          <dataType>Number</dataType>
+        </DataEntitySource>
+        <DataEntitySource>
+          <name>outbound utilization</name>
           <dataType>Number</dataType>
         </DataEntitySource>
       </sources>
