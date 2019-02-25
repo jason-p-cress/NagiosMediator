@@ -7,7 +7,6 @@ cpuStats[timestamp].csv		"CPU Stats"	"timestamp"=var[timestamp],"host name"=valu
 cpuLoad[timestamp].csv		"Current Load"	"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
 cpuLoad[timestamp].csv		"Load"		"timestamp"=var[timestamp],"host name"=value[host_name],"Load5"=regex[performance_data:"load5=(.+?)\;"]
 diskUsage[timestamp].csv	"/ Disk Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"disk name"=regex[performance_data:"^(.+?)="],"disk used"=regex[performance_data:"^/+?=(.+?)MB"]
-hostStatus[timestamp].csv	"Ping"		"timestamp"=var[timestamp],"name"=value[host_name],"rta"=regex[performance_data:rta=(.+?)ms],"pl"=regex[performance_data:pl=(.+?)\%]
 memoryData[timestamp].csv	"Memory Usage"	"timestamp"=var[timestamp],"host name"=value[host_name],"memory total"=regex[performance_data:"total=(.+?)MB"],"memory used"=regex[performance_data:"used=(.+?)MB"]
 #memoryUsage[timestamp].csv	"Memory Data"	"timestamp"=var[timestamp],"host name"=value[host_name],"committed"=committed,"physical"=physical
 pingData[timestamp].csv		"Ping"		"timestamp"=var[timestamp],"host name"=value[host_name],"ping_rta value"=regex[performance_data:"rta=(.+?)ms"],"ping_pl value"=regex[performance_data:"pl=(.+?)\%"]

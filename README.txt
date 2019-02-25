@@ -30,7 +30,9 @@ Installation
    and change the aggregation interval to something more relevant (e.g. 5-minutes) 
       see: https://www.ibm.com/support/knowledgecenter/en/SSJQQ3_1.3.4/com.ibm.scapi.doc/admin_guide/t_tsaa_adminguide_settingtheaggregationinterval.html
 
-7. Test the mediator by running the new-nagios.py file located under the bin directory of your mediator installation
+7. Configure the mediator as described in the "Configuring the mediator" section of this README
+
+8. Test the mediator by running the new-nagios.py file located under the bin directory of your mediator installation
    location. Inspect the created CSV files and ensure that there is metric data being generated, as expected for your
    particular Nagios XI deployment. If the expected data is being generated, create a crontab entry (generally
    using the 'scadmin' user, or if you have installed PI as a different user, you would use that user). For example:
@@ -39,7 +41,7 @@ Installation
 
    ... will run the mediator on a 5-minute recurring schedule.
 
-8. Deploy the NAGIOS558.pamodel definition to the desired topic using the PI mediation tool. The default model can be
+9. Deploy the NAGIOS558.pamodel definition to the desired topic using the PI mediation tool. The default model can be
    found in the 'pamodel' directory of the location where you unzipped the mediator pack.
 
 Configuring the mediator
@@ -56,7 +58,7 @@ The 'config' directory contains the 'nagios_config.txt' where you define the con
 	saveApiResponse: If set to 1, will write out the raw API response received from Nagios to the log directory
 	unWebify: for future
 
-Configuration of the nagios_metric_file_definitions.txt file 
+Customization of the nagios_metric_file_definitions.txt file 
 ============================================================
 
 The 'config' directory contains the 'nagois_metric_file_definitions.txt', which defines the CSV files, the monitor
