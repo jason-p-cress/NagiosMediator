@@ -89,6 +89,7 @@ PI Filename:
 	cpuLoad			timestamp,host name,Load5
 	cpuStats		timestamp,host name,user,system,iowait,idle
 	users			timestamp,host name,users
+	networkUtilization	timestamp,host name,interface,inbound utilization,outbound utilization
 
 Different Nagios monitors may provide data for the above model in different ways. For example, if you are using
 the NCPA agent for monitoring a Windows server, CPU utilization information is provided by a monitor entitled 
@@ -113,18 +114,11 @@ This configuration file allows you to define:
 If you have defined multiple metric definitions that use the same CSV file, and the CSV header information / columns
 do not match between
 
-The default metric configuration includes an example for networkUtilization, but this CSV file does not have an
-associated model configuration. If desired, the user can modify the model and include this data as well. The
-structure of the networkUtilization CSV file is as follows:
-
-	networkUtilization	timestamp,host name,interface,inbound utilization,outbound utilization
-
-In general, default monitors for servers do not include network utilization data. If you are monitoring network
-devices, this information is usually included by default. Also, the VMware default monitors include aggregate
-network utilization. The example metric definition file included in this distribution includes entries for both
-network device utilization (using the Network Switch / Router wizard provided in Nagios) and for VMWare network
-utilization (enabled by default using the Nagios VMWare wizard).
-
+A note about Network Utilization in Nagios - In general, default monitors for servers do not include network 
+utilization data. For network devices (router/switch), this information is usually included by default. Also, the
+VMware default monitors include aggregate network utilization. The example metric definition file included in this 
+distribution includes entries for both network device utilization (using the Network Switch / Router wizard provided
+in Nagios) and for VMWare network utilization (enabled by default using the Nagios VMWare wizard).
 
 ... more documentation to follow
 
