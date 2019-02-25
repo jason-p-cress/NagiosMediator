@@ -14,11 +14,15 @@ Installation
 ============
 
 1. Unzip the package to the desired location (e.g. /opt/IBM/scanalytics/mediators/ExtensibleNagiosMediator)
+
 2. Open the Predictive Insights mediation utility, and open the pamodel file located in the pamodel directory
    of this distribution.
-3. Ensure that the correct time zone is configured
+
+3. Ensure that the correct time zone is configured for your PI installation (VERY IMPORTANT)
+
 4. Ensure that the "File Path" is pointed to the nagioscsv directory where you installed this package
    on the filesystem
+
 5. If you will be deploying to a new topic, ensure that you create the topic (e.g. NAGIOS)
       see: https://www.ibm.com/support/knowledgecenter/en/SSJQQ3_1.3.3/com.ibm.scapi.doc/admin_guide/t_tsaa_adminguide_linktotopic.html
 
@@ -26,7 +30,17 @@ Installation
    and change the aggregation interval to something more relevant (e.g. 5-minutes) 
       see: https://www.ibm.com/support/knowledgecenter/en/SSJQQ3_1.3.4/com.ibm.scapi.doc/admin_guide/t_tsaa_adminguide_settingtheaggregationinterval.html
 
-7. Deploy the NAGIOS558.pamodel definition to the desired topic using the PI mediation tool
+7. Test the mediator by running the new-nagios.py file located under the bin directory of your mediator installation
+   location. Inspect the created CSV files and ensure that there is metric data being generated, as expected for your
+   particular Nagios XI deployment. If the expected data is being generated, create a crontab entry (generally
+   using the 'scadmin' user, or if you have installed PI as a different user, you would use that user). For example:
+
+   */5 * * * * /opt/IBM/scanalytics/mediators/Nagios558Mediator/bin/new-nagios558.py
+
+   ... will run the mediator on a 5-minute recurring schedule.
+
+8. Deploy the NAGIOS558.pamodel definition to the desired topic using the PI mediation tool. The default model can be
+   found in the 'pamodel' directory of the location where you unzipped the mediator pack.
 
 Configuring the mediator
 ========================
@@ -56,16 +70,16 @@ PI Filename:
 	For this version of the mediator, a predictive insights model file is included that contains the following
         Metric Groups, and their associated CSV files:
 
-	cpuUsage	timestamp,host name,cpu usage	
-        diskUsage	timestamp,host name,disk name,disk used,disk free
-	memoryData	timestamp,host name,memory total,memory used
-	pingData	timestamp,host name,ping_rta value,ping_pl value
-	swapUsage	timestamp,host name,swap data
-	totalProcess	timestamp,host name,total processes
-	HTTPData	timestamp,host name,http data
-	cpuLoad		timestamp,host name,Load5
-	cpuStats	timestamp,host name,user,system,iowait,idle
-	users		timestamp,host name,users
+	cpuUsage		timestamp,host name,cpu usage	
+        diskUsage		timestamp,host name,disk name,disk used,disk free
+	memoryData		timestamp,host name,memory total,memory used
+	pingData		timestamp,host name,ping_rta value,ping_pl value
+	swapUsage		timestamp,host name,swap data
+	totalProcess		timestamp,host name,total processes
+	HTTPData		timestamp,host name,http data
+	cpuLoad			timestamp,host name,Load5
+	cpuStats		timestamp,host name,user,system,iowait,idle
+	users			timestamp,host name,users
 
 Different Nagios monitors may provide data for the above model in different ways. For example, if you are using
 the NCPA agent for monitoring a Windows server, CPU utilization information is provided by a monitor entitled 
@@ -86,6 +100,19 @@ This configuration file allows you to define:
            regex[performance_data:"load5=(.+?)\;"]  --  extracts text from the attribute 'performance_data' for this
                                                         for this monitor's JSON response
            literal[0]  --  inserts the literal value of 0 into this column of the CSV file
+
+If you have defined multiple metric definitions that use the same CSV file, and the CSV header information / columns
+do not match between
+
+The default metric configuration includes an example for networkUtilization, but this CSV file does not have an
+associated model configuration. If desired, the user can modify the model and include this data as well. The
+structure of the networkUtilization CSV file is as follows:
+
+	networkUtilization	timestamp,host name,interface,inbound utilization,outbound utilization
+
+In general, default monitors for servers do not include network utilization data. If you are monitoring network
+devices, this information is usually included by default. Also, the VMware default monitors include aggregate
+network utilization.
 
 
 ... more documentation to follow
