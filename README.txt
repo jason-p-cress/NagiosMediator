@@ -77,7 +77,7 @@ The csv filename	The NagiosXI monitor name	The structure of the csv and data def
 
 PI Filename:
 	For this version of the mediator, a predictive insights model file is included that contains the following
-        Metric Groups, and their associated CSV files:
+        Metric Groups, and their associated CSV file definitions:
 
 	cpuUsage		timestamp,host name,cpu usage	
         diskUsage		timestamp,host name,disk name,disk used,disk free
@@ -97,7 +97,9 @@ the NCPA agent for monitoring a Windows server, CPU utilization information is p
 monitor entitled "CPU Stats". Additionally, different monitoring methods may output their performance data in 
 different formats. For example, while both the Windows NRPE monitoring agent and the Linux SNMP monitoring agent use
 a monitor named "CPU Usage", the output of the performance data (found in the "performance_data" JSON object of
-the monitor API responce) is formatted completely differently. 
+the monitor API responce) is formatted completely differently. Some performance data of interest may best be 
+extracted from the 'status_text' JSON attribute rather than the 'performance_data' attribute. Any attribute may
+be evaluated for extraction either by explicit value of the attribute or a regular expression extraction.
 
 This configuration file allows you to define:
 	1. The Monitor Record you want to pull performance data from (which is servicestatus->name in the API response)
@@ -112,7 +114,8 @@ This configuration file allows you to define:
            literal[0]  --  inserts the literal value of 0 into this column of the CSV file
 
 If you have defined multiple metric definitions that use the same CSV file, and the CSV header information / columns
-do not match between
+do not match between metric definitions, an error is generated for that monitor entry. This is to ensure that the
+data populated in the CSV file is standardized across monitor metric definitions.
 
 A note about Network Utilization in Nagios - In general, default monitors for servers do not include network 
 utilization data. For network devices (router/switch), this information is usually included by default. Also, the
